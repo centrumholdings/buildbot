@@ -1,0 +1,76 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+p	= buildbot
+d	= debian/$(p)
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	python setup.py build
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	rm -rf build
+	-find -name '*.py[co]' | xargs rm -f
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs \
+		/usr/share/buildbot/contrib \
+		/usr/share/info \
+		/usr/share/doc/$(p)
+	python setup.py install --prefix=$(d)/usr --no-compile
+	cp -p contrib/*.py contrib/README.txt $(d)//usr/share/buildbot/contrib/
+	-find debian -name '*.py[co]' | xargs rm -f
+
+	: # Replace all '#!' calls to python with /usr/bin/python
+	: # and make them executable
+	for i in `find debian/buildbot -type f`; do \
+	  sed '1s,#!.*python[^ ]*\(.*\),#! /usr/bin/python\1,' \
+		$$i > $$i.temp; \
+	  if cmp --quiet $$i $$i.temp; then \
+	    rm -f $$i.temp; \
+	  else \
+	    mv -f $$i.temp $$i; \
+	    chmod 755 $$i; \
+	    echo "fixed interpreter: $$i"; \
+	  fi; \
+	done
+
+
+# Build architecture-independent files here.
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	makeinfo --no-split -o $(d)/usr/share/info/buildbot.info \
+		docs/buildbot.texinfo
+#	makeinfo --html --no-split -o $(d)/usr/share/doc/$(p)/buildbot.html \
+#		docs/buildbot.texinfo
+	dh_installinit --no-restart-on-upgrade --no-start
+	dh_installman
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_pycentral
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture-dependent files here.
+binary-arch: build install
+# We have nothing to do by default.
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

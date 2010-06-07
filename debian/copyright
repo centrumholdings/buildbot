@@ -1,0 +1,34 @@
+This package was debianized by Matthias Klose <doko@ubuntu.com>
+on Tue,  4 Apr 2006 16:33:44 +0200.
+
+It was downloaded from http://prdownloads.sourceforge.net/buildbot/
+
+Copyright Holder: Brian Warner <warner-buildbot@lothar.com>
+
+Software license:
+
+Licensed under the GPL.
+
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL'.
+
+The manual license:
+
+Copyright (C) 2005,2006 Brian Warner
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+
+contrib/svnpoller.py:
+
+Copyright (C) 2006 John Pye
+
+This script is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/LGPL'.
